@@ -2,19 +2,18 @@ var app = angular.module('ascii-warehouse', []);
 
 app.controller('ProductsController', function($scope) {
     var controller = this;
-
     controller.all = [];
 
-    controller.init = function() {
-        controller.fetchProducts();
+    function init() {
+        fetchProducts();
     }
 
-    controller.setProducts = function(products) {
+    function setProducts(products) {
         controller.all = products;
         $scope.$apply();
     }
 
-    controller.fetchProducts = function() {
+    function fetchProducts() {
         function ndjsonToJson(ndjson) {
             var jsonArrayStrings = ndjson.split('\n');
             var jsonArrayObjects = [];
@@ -28,9 +27,9 @@ app.controller('ProductsController', function($scope) {
 
         $.ajax('/api/products')
             .complete(function(data) {
-                controller.setProducts(ndjsonToJson(data.responseText))
+                setProducts(ndjsonToJson(data.responseText))
             });
     }
 
-    controller.init();
+    init();
 });
