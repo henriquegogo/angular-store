@@ -1,20 +1,22 @@
 var app = angular.module('ascii-warehouse', []);
-
 app.controller('ProductsController', function($scope) {
     var apiUrl = '/api/products';
     var perPage = 15;
-    var limit = 15;
+    var total = 15;
     var sort = 'id';
 
     $scope.products = [];
 
     function init() {
         $scope.sortBy(sort);
+        scrollListener(getMore);
     }
 
-    function setProducts(products) {
-        $scope.products = products;
-        $scope.$apply();
+    function scrollListener(callback) {
+        window.addEventListener("scroll", function(){
+            var currentYOffset = window.innerHeight + window.pageYOffset;
+            if (currentYOffset >= document.body.offsetHeight) callback();
+        })
     }
 
     function addProducts(moreProducts) {
@@ -22,6 +24,11 @@ app.controller('ProductsController', function($scope) {
             $scope.products.push(moreProducts[i]);
         }
         $scope.$apply();
+    }
+
+    function getMore() {
+        fetchProducts(total);
+        total = total + perPage; 
     }
 
     function ndjsonToJson(ndjson) {
@@ -35,8 +42,8 @@ app.controller('ProductsController', function($scope) {
         return jsonArrayObjects;
     }
 
-    function fetchProducts(params) {
-        var url = apiUrl + params;
+    function fetchProducts(skip) {
+        var url = apiUrl + '?sort=' + sort + '&limit=' + perPage + '&skip=' + skip;
         $.ajax(url).complete(function(data) {
             addProducts(ndjsonToJson(data.responseText))
         });
@@ -44,16 +51,8 @@ app.controller('ProductsController', function($scope) {
 
     $scope.sortBy = function(filter) {
         sort = filter;
-        limit = perPage;
-        var params = '?sort=' + sort + '&limit=' + limit + '&skip=0';
         $scope.products = [];
-        fetchProducts(params);
-    }
-
-    $scope.getMore = function() {
-        limit = limit + perPage; 
-        var params = '?sort=' + sort + '&limit=' + limit + '&skip=' + (limit - perPage);
-        fetchProducts(params);
+        fetchProducts(0);
     }
 
     init();
