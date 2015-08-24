@@ -3,10 +3,12 @@ app.controller('ProductsController', function($scope) {
     var apiUrl = '/api/products';
     var perPage = 15;
     var total = 15;
+    var maximum = 100;
     var sort = 'id';
 
     $scope.products = [];
     $scope.isLoading = false;
+    $scope.endOfList = false;
 
     function init() {
         $scope.sortBy(sort);
@@ -38,14 +40,24 @@ app.controller('ProductsController', function($scope) {
         return jsonArrayObjects;
     }
 
-    function fetchProducts(skip) {
-        var url = apiUrl + '?sort=' + sort + '&limit=' + perPage + '&skip=' + skip;
-        $scope.isLoading = true;
-        $.ajax(url).complete(function(data) {
-            $scope.isLoading = false;
-            addProducts(ndjsonToJson(data.responseText))
-        });
+    function fetchProducts(skipValue) {
+        if (skipValue <= maximum) { // Forcing a maximum quantity of products
+            var url = apiUrl + '?sort=' + sort + '&limit=' + perPage + '&skip=' + skipValue;
+            $scope.isLoading = true;
+            $.ajax(url).complete(function(data) {
+                $scope.isLoading = false;
+                addProducts(ndjsonToJson(data.responseText))
+            });
+        } else {
+            $scope.endOfList = true;
+        }
     }
+
+    $scope.loadProductsLabel = function() {
+        if ($scope.isLoading) return "Loading...";
+        else if ($scope.endOfList) return "~ end of catalogue ~";
+        else return "More products";
+    };
 
     $scope.sortBy = function(filter) {
         sort = filter;

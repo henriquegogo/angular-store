@@ -56,7 +56,7 @@
                 </table>
             </div>
             <div class="container">
-                <button type="button" class="col-md-12 btn btn-default btn-lg" ng-disabled="isLoading" ng-click="getMore()">{{isLoading ? 'Loading...' : 'More products'}}</button>
+                <button type="button" class="col-md-12 btn btn-default btn-lg" ng-disabled="isLoading || endOfList" ng-click="getMore()">{{loadProductsLabel()}}</button>
             </div>
         </section>
     </body>
