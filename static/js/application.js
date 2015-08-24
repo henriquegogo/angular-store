@@ -6,10 +6,11 @@ app.controller('ProductsController', function($scope) {
     var sort = 'id';
 
     $scope.products = [];
+    $scope.isLoading = false;
 
     function init() {
         $scope.sortBy(sort);
-        scrollListener(getMore);
+        scrollListener($scope.getMore);
     }
 
     function scrollListener(callback) {
@@ -26,11 +27,6 @@ app.controller('ProductsController', function($scope) {
         $scope.$apply();
     }
 
-    function getMore() {
-        fetchProducts(total);
-        total = total + perPage; 
-    }
-
     function ndjsonToJson(ndjson) {
         var jsonArrayStrings = ndjson.split('\n');
         var jsonArrayObjects = [];
@@ -44,7 +40,9 @@ app.controller('ProductsController', function($scope) {
 
     function fetchProducts(skip) {
         var url = apiUrl + '?sort=' + sort + '&limit=' + perPage + '&skip=' + skip;
+        $scope.isLoading = true;
         $.ajax(url).complete(function(data) {
+            $scope.isLoading = false;
             addProducts(ndjsonToJson(data.responseText))
         });
     }
@@ -53,7 +51,12 @@ app.controller('ProductsController', function($scope) {
         sort = filter;
         $scope.products = [];
         fetchProducts(0);
-    }
+    };
+
+    $scope.getMore = function() {
+        fetchProducts(total);
+        total = total + perPage; 
+    };
 
     init();
 });
