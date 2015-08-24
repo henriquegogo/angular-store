@@ -1,3 +1,7 @@
 .ad {
     width: 100%;
 }
+
+.products table tr {
+    height: 60px;
+}

@@ -1,6 +1,6 @@
 var app = angular.module('ascii-warehouse', []);
 
-app.controller('ProductsController', function() {
+app.controller('ProductsController', function($scope) {
     var controller = this;
 
     controller.all = [
@@ -15,4 +15,23 @@ app.controller('ProductsController', function() {
         {"id":"8-wktdm24oloumzpvi","size":27,"price":682,"face":"(\\/)(°,,,°)(\\/)","date":"Sun Aug 16 2015 09:12:59 GMT-0300 (BRT)"},
         {"id":"9-jha7p87k20veipb9","size":35,"price":96,"face":"(¬_¬)","date":"Sun Aug 09 2015 02:20:54 GMT-0300 (BRT)"}
     ];
+
+    function ndjsonToJson(ndjson) {
+        var jsonArrayStrings = ndjson.split('\n');
+        var jsonArrayObjects = [];
+        
+        for (var i in jsonArrayStrings) {
+            if (jsonArrayStrings[i]) jsonArrayObjects[i] = JSON.parse(jsonArrayStrings[i]);
+        }
+
+        return jsonArrayObjects;
+    }
+
+    $.ajax('/api/products')
+        .complete(function(data) {
+            controller.all = ndjsonToJson(data.responseText);
+            $scope.$apply();
+        });
+
+   // $http.get('/api/products');
 });
