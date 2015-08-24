@@ -66,6 +66,7 @@ app.controller('ProductsController', function($scope) {
 
     function fetchProducts(skipValue) {
         if (skipValue <= maximum) { // Forcing a maximum quantity of products
+            if (skipValue + perPage > maximum) skipValue = maximum - perPage;
             var url = apiUrl + '?sort=' + sort + '&limit=' + perPage + '&skip=' + skipValue;
             $scope.isLoading = true;
             $.ajax(url).complete(function(data) {
