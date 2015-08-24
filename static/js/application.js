@@ -1,11 +1,13 @@
 angular.module('viewFilters', []).filter('daysago', function() {
     return function(input) {
-        return input + ' days ago';
+        var dateObject = new Date(input);
+        var dateRepresentation = dateObject.toLocaleString();
+
+        return dateRepresentation;
     }
 });
 
 var app = angular.module('ascii-warehouse', ['viewFilters']);
-
 app.controller('ProductsController', function($scope) {
     var apiUrl = '/api/products';
     var perPage = 15;
