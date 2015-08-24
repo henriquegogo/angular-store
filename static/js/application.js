@@ -2,12 +2,14 @@ var app = angular.module('ascii-warehouse', []);
 
 app.controller('ProductsController', function($scope) {
     var apiUrl = '/api/products';
-    var total = 15;
+    var perPage = 15;
+    var limit = 15;
+    var sort = 'id';
 
     $scope.products = [];
 
     function init() {
-        fetchProducts();
+        $scope.sortBy(sort);
     }
 
     function setProducts(products) {
@@ -33,21 +35,25 @@ app.controller('ProductsController', function($scope) {
         return jsonArrayObjects;
     }
 
-    function fetchProducts(sortBy) {
-        var url = apiUrl;
-        if (sortBy) url = url + '?sort=' + sortBy;
-
+    function fetchProducts(params) {
+        var url = apiUrl + params;
         $.ajax(url).complete(function(data) {
-            setProducts(ndjsonToJson(data.responseText))
+            addProducts(ndjsonToJson(data.responseText))
         });
     }
 
     $scope.sortBy = function(filter) {
-        var url = apiUrl + '?sort=' + filter + '';
+        sort = filter;
+        limit = perPage;
+        var params = '?sort=' + sort + '&limit=' + limit + '&skip=0';
+        $scope.products = [];
+        fetchProducts(params);
+    }
 
-        $.ajax(url).complete(function(data) {
-            setProducts(ndjsonToJson(data.responseText))
-        });
+    $scope.getMore = function() {
+        limit = limit + perPage; 
+        var params = '?sort=' + sort + '&limit=' + limit + '&skip=' + (limit - perPage);
+        fetchProducts(params);
     }
 
     init();

@@ -32,9 +32,9 @@
             </div>
         </header>
 
-        <section class="products">
+        <section class="products" ng-controller="ProductsController">
             <div class="container">
-                <table class="table table-striped" ng-controller="ProductsController">
+                <table class="table table-striped">
                     <thead>
                         <tr>
                             <th></th>
@@ -54,6 +54,7 @@
                         </tr>
                     </tbody>
                 </table>
+                <div ng-click="getMore()">More</div>
             </div>
         </section>
 
