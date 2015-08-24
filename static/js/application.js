@@ -34,9 +34,9 @@ app.controller('ProductsController', ['$scope', '$http', function($scope, $http)
     }
 
     function scrollListener(callback) {
-        window.addEventListener("scroll", function() {
+        angular.element(window).bind('scroll', function() {
             var currentYOffset = window.innerHeight + window.pageYOffset;
-            if (currentYOffset >= document.body.offsetHeight) $scope.$apply(callback);
+            if (currentYOffset >= document.body.offsetHeight) callback();
         })
     }
 
