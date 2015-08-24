@@ -34,8 +34,32 @@
 
         <section class="products">
             <div class="container">
-            ... products go here ...
+                <table class="table table-striped" ng-controller="ProductsController as products">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Id</th>
+                            <th>Size</th>
+                            <th>Price</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="product in products.all">
+                            <td style="font-size: {{product.size}}px">{{product.face}}</td>
+                            <td>{{product.id}}</td>
+                            <td>{{product.size}}</td>
+                            <td>{{product.price}}</td>
+                            <td>{{product.date}}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </section>
+
+        <footer class="container">
+            <hr>
+            <p>Made by <a href="http://henriquegogo.github.io">Henrique Soares</a> 2015</p>
+        </footer>
     </body>
 </html>
