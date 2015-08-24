@@ -55,6 +55,7 @@ app.controller('ProductsController', function($scope) {
 
     $scope.getMore = function() {
         fetchProducts(total);
+        $scope.$apply();
         total = total + perPage; 
     };
 
