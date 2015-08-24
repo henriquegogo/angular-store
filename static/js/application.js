@@ -2,15 +2,12 @@ var app = angular.module('ascii-warehouse', []);
 app.controller('ProductsController', function($scope) {
     var apiUrl = '/api/products';
     var perPage = 15;
-    var total = 15;
+    var total = perPage;
     var maximum = 100;
     var sort = 'id';
 
-    $scope.products = [];
-    $scope.isLoading = false;
-    $scope.endOfList = false;
-
     function init() {
+        clearState();
         $scope.sortBy(sort);
         scrollListener($scope.getMore);
     }
@@ -20,6 +17,13 @@ app.controller('ProductsController', function($scope) {
             var currentYOffset = window.innerHeight + window.pageYOffset;
             if (currentYOffset >= document.body.offsetHeight) callback();
         })
+    }
+
+    function clearState() {
+        total = perPage;
+        $scope.products = [];
+        $scope.isLoading = false;
+        $scope.isEndOfCatalogue = false;
     }
 
     function addProducts(moreProducts) {
@@ -49,19 +53,19 @@ app.controller('ProductsController', function($scope) {
                 addProducts(ndjsonToJson(data.responseText))
             });
         } else {
-            $scope.endOfList = true;
+            $scope.isEndOfCatalogue = true;
         }
     }
 
     $scope.loadProductsLabel = function() {
         if ($scope.isLoading) return "Loading...";
-        else if ($scope.endOfList) return "~ end of catalogue ~";
+        else if ($scope.isEndOfCatalogue) return "~ end of catalogue ~";
         else return "More products";
     };
 
     $scope.sortBy = function(filter) {
         sort = filter;
-        $scope.products = [];
+        clearState();
         fetchProducts(0);
     };
 
