@@ -13,7 +13,7 @@ app.controller('ProductsController', function($scope) {
         $scope.$apply();
     }
 
-    function fetchProducts() {
+    function fetchProducts(sortBy) {
         function ndjsonToJson(ndjson) {
             var jsonArrayStrings = ndjson.split('\n');
             var jsonArrayObjects = [];
@@ -25,11 +25,18 @@ app.controller('ProductsController', function($scope) {
             return jsonArrayObjects;
         }
 
-        $.ajax('/api/products')
+        var url = '/api/products';
+        if (sortBy) url = url + '?sort=' + sortBy;
+
+        $.ajax(url)
             .complete(function(data) {
                 setProducts(ndjsonToJson(data.responseText))
             });
     }
+
+    controller.fetchBySize = function() { fetchProducts('size'); }
+    controller.fetchByPrice = function() { fetchProducts('price'); }
+    controller.fetchById = function() { fetchProducts('id'); }
 
     init();
 });

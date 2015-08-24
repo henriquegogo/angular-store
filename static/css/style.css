@@ -5,3 +5,8 @@
 .products table tr {
     height: 60px;
 }
+
+.products table thead [ng-click] {
+    text-decoration: underline;
+    cursor: pointer;
+}
