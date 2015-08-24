@@ -13,7 +13,7 @@ app.controller('ProductsController', function($scope) {
     }
 
     function scrollListener(callback) {
-        window.addEventListener("scroll", function(){
+        window.addEventListener("scroll", function() {
             var currentYOffset = window.innerHeight + window.pageYOffset;
             if (currentYOffset >= document.body.offsetHeight) callback();
         })
