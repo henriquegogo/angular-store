@@ -1,19 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="ascii-warehouse">
     <head>
         <title>Discount Ascii Warehouse</title>
+
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+        <!-- Angular -->
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
+
+        <!-- Application -->
+        <link rel="stylesheet" href="/css/style.css">
+        <script src="/js/application.js"></script>
     </head>
     <body>
-        <header>
-            <h1>Discount Ascii Warehouse</h1>
+        <header class="jumbotron">
+            <div class="container">
+                <div class="col-md-9">
+                    <h1>Discount Ascii Warehouse</h1>
 
-            <p>Here you're sure to find a bargain on some of the finest ascii available to purchase. Be sure to peruse our selection of ascii faces in an exciting range of sizes and prices.</p>
-
-            <p>But first, a word from our sponsors:</p> <script>document.write('<img class="ad" src="/ad/?r=' + Math.floor(Math.random()*1000) + '"/>');</script>
+                    <p>Here you're sure to find a bargain on some of the finest ascii available to purchase. Be sure to peruse our selection of ascii faces in an exciting range of sizes and prices.</p>
+                </div>
+                <div class="col-md-3">
+                    <small>Sponsor:</small><br><script>document.write('<img class="ad" src="/ad/?r=' + Math.floor(Math.random()*1000) + '"/>');</script>
+                </div>
+            </div>
         </header>
 
         <section class="products">
+            <div class="container">
             ... products go here ...
+            </div>
         </section>
     </body>
 </html>
