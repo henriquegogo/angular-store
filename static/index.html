@@ -48,9 +48,9 @@
                         <tr ng-repeat="product in products">
                             <td style="font-size: {{product.size}}px">{{product.face}}</td>
                             <td>{{product.id}}</td>
-                            <td>{{product.size}}</td>
-                            <td>{{product.price}}</td>
-                            <td>{{product.date}}</td>
+                            <td>{{product.size}} pixels</td>
+                            <td>{{(product.price / 100) | currency:'$':2}}</td>
+                            <td>{{product.date | daysago}}</td>
                         </tr>
                     </tbody>
                 </table>
