@@ -1,9 +1,20 @@
 angular.module('viewFilters', []).filter('daysago', function() {
+    function timeAgo(date) {
+        var seconds = Math.floor((new Date() - date) / 1000);
+        var interval = Math.floor(seconds / 86400);
+
+        if (interval > 7) return date.toLocaleString();
+        if (interval > 1) return interval + " days ago";
+        interval = Math.floor(seconds / 3600);
+        if (interval > 1) return interval + " hours ago";
+        interval = Math.floor(seconds / 60);
+        if (interval > 1) return interval + " minutes ago";
+        return Math.floor(seconds) + " seconds ago";
+    }
+
     return function(input) {
         var dateObject = new Date(input);
-        var dateRepresentation = dateObject.toLocaleString();
-
-        return dateRepresentation;
+        return timeAgo(dateObject);
     }
 });
 
