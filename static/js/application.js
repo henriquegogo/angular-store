@@ -20,7 +20,7 @@ app.filter('daysago', function() {
     }
 });
 
-app.controller('ProductsController', ['$scope', function($scope) {
+app.controller('ProductsController', ['$scope', '$http', function($scope, $http) {
     var apiUrl = '/api/products';
     var perPage = 15;
     var total = perPage;
@@ -70,17 +70,17 @@ app.controller('ProductsController', ['$scope', function($scope) {
             var url = apiUrl + '?sort=' + sort + '&limit=' + perPage + '&skip=' + skipValue;
             $scope.isLoading = true;
 
-            $.ajax(url).complete(function(data) {
-                $scope.$apply(function(){
+            $http.get(url, { transformResponse: function(value) { 
+                    return ndjsonToJson(value);
+
+                }}).then(function(response) {
                     $scope.isLoading = false;
-                    var productsJson = ndjsonToJson(data.responseText);
-                    addProducts(productsJson);
+                    addProducts(response.data);
                 });
-            });
+
         } else {
             $scope.isEndOfCatalogue = true;
         }
-
     }
 
     $scope.loadProductsLabel = function() {
