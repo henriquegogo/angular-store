@@ -22,7 +22,7 @@ app.filter('daysago', function() {
 
 app.controller('ProductsController', ['$scope', '$http', function($scope, $http) {
     var apiUrl = '/api/products';
-    var perPage = 15;
+    var perPage = 10;
     var maximum = 100;
     var sort = 'id';
 
@@ -40,7 +40,6 @@ app.controller('ProductsController', ['$scope', '$http', function($scope, $http)
     }
 
     function clearState() {
-        total = perPage;
         $scope.products = [];
         $scope.isLoading = false;
         $scope.isEndOfCatalogue = false;
@@ -63,21 +62,21 @@ app.controller('ProductsController', ['$scope', '$http', function($scope, $http)
         return jsonArrayObjects;
     }
 
+    function requestProducts(total, callback) {
+        var url = apiUrl + '?sort=' + sort + '&limit=' + perPage + '&skip=' + total;
+        $http.get(url, { transformResponse: function(value) { 
+            return ndjsonToJson(value);
+        }}).then(function(response) { callback(response); });
+    }
+
     function fetchProducts(total) {
-        if (!$scope.isLoading && total <= maximum) { // Forcing a maximum quantity of products
-            if (total + perPage > maximum) total = maximum - perPage;
-            var url = apiUrl + '?sort=' + sort + '&limit=' + perPage + '&skip=' + total;
-            
+        if (!$scope.isLoading && total + perPage <= maximum) { // Forcing a maximum quantity of products
             $scope.isLoading = true;
-            $http.get(url, { transformResponse: function(value) { 
-                    return ndjsonToJson(value);
-
-                }}).then(function(response) {
-                    addProducts(response.data);
-                    $scope.isLoading = false;
-                });
-
-        } else if (total > maximum) {
+            requestProducts(total, function(response) {
+                addProducts(response.data);
+                $scope.isLoading = false;
+            });
+        } else if (total + perPage > maximum) {
             $scope.isEndOfCatalogue = true;
         }
     }
