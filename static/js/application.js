@@ -29,6 +29,7 @@ app.controller('ProductsController', ['$scope', '$http', function($scope, $http)
     var preloadedProducts = null;
     var requestIsRunning = false;
     var lastSponsorId = null;
+    var runPreloader = true;
     $scope.products = [];
 
     function init() {
@@ -46,6 +47,7 @@ app.controller('ProductsController', ['$scope', '$http', function($scope, $http)
     function clearState() {
         preloadedProducts = null;
         lastSponsorId = null;
+        runPreloader = true;
         $scope.products = [];
         $scope.isLoading = false;
         $scope.isEndOfCatalogue = false;
@@ -99,12 +101,19 @@ app.controller('ProductsController', ['$scope', '$http', function($scope, $http)
     function preloader() {
         var total = $scope.products.length;
         requestProducts(total, function(products) {
-            preloadedProducts = products;
-            if ($scope.isLoading) showPreloaded();
+            if (runPreloader) {
+                preloadedProducts = products;
+                if ($scope.isLoading) showPreloaded();
+
+            } else {
+                fetchProducts(0);
+            }
+
         });
     }
 
     function showPreloaded() {
+        runPreloader = true;
         $scope.isLoading = false;
         addProducts(preloadedProducts);
         preloadedProducts = null;
@@ -135,6 +144,7 @@ app.controller('ProductsController', ['$scope', '$http', function($scope, $http)
     $scope.sortBy = function(filter) {
         sort = filter;
         clearState();
+        runPreloader = false;
         fetchProducts(0);
     };
 
