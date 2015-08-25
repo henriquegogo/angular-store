@@ -64,20 +64,20 @@ app.controller('ProductsController', ['$scope', '$http', function($scope, $http)
     }
 
     function fetchProducts(total) {
-        if (total <= maximum) { // Forcing a maximum quantity of products
+        if (!$scope.isLoading && total <= maximum) { // Forcing a maximum quantity of products
             if (total + perPage > maximum) total = maximum - perPage;
             var url = apiUrl + '?sort=' + sort + '&limit=' + perPage + '&skip=' + total;
+            
             $scope.isLoading = true;
-
             $http.get(url, { transformResponse: function(value) { 
                     return ndjsonToJson(value);
 
                 }}).then(function(response) {
-                    $scope.isLoading = false;
                     addProducts(response.data);
+                    $scope.isLoading = false;
                 });
 
-        } else {
+        } else if (total > maximum) {
             $scope.isEndOfCatalogue = true;
         }
     }
