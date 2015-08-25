@@ -56,7 +56,6 @@ app.controller('ProductsController', ['$scope', '$http', function($scope, $http)
         var newId = generateMath();
         while (allUniqueIds[newId]) newId = generateMath(); 
         allUniqueIds[newId] = true;
-        console.log(allUniqueIds);
         return newId;
     }
 
