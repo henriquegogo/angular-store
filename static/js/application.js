@@ -63,18 +63,23 @@ app.controller('ProductsController', ['$scope', '$http', function($scope, $http)
     }
 
     function requestProducts(total, callback) {
-        var url = apiUrl + '?sort=' + sort + '&limit=' + perPage + '&skip=' + total;
-        $http.get(url, { transformResponse: function(value) { 
-            return ndjsonToJson(value);
-        }}).then(function(response) { callback(response); });
+        if (!$scope.isLoading) {
+            var url = apiUrl + '?sort=' + sort + '&limit=' + perPage + '&skip=' + total;
+
+            $scope.isLoading = true;
+            $http.get(url, { transformResponse: function(value) { 
+                return ndjsonToJson(value);
+            }}).then(function(response) {
+                $scope.isLoading = false;
+                callback(response.data);
+            });
+        }
     }
 
     function fetchProducts(total) {
-        if (!$scope.isLoading && total + perPage <= maximum) { // Forcing a maximum quantity of products
-            $scope.isLoading = true;
-            requestProducts(total, function(response) {
-                addProducts(response.data);
-                $scope.isLoading = false;
+        if (total + perPage <= maximum) { // Forcing a maximum quantity of products
+            requestProducts(total, function(products) {
+                addProducts(products);
             });
         } else if (total + perPage > maximum) {
             $scope.isEndOfCatalogue = true;
