@@ -82,21 +82,26 @@ app.controller('ProductsController', ['$scope', '$http', function($scope, $http)
         var total = $scope.products.length;
         requestProducts(total, function(products) {
             preloadedProducts = products;
+            if ($scope.isLoading) showPreloaded();
         });
+    }
+
+    function showPreloaded() {
+        $scope.isLoading = false;
+        addProducts(preloadedProducts);
+        preloadedProducts = null;
+        preloader();
     }
 
     function fetchProducts(total) {
         if (preloadedProducts && total + perPage <= maximum) {
-            addProducts(preloadedProducts);
-            preloadedProducts = null;
-            preloader();
+            showPreloaded();
 
         } else if (total + perPage <= maximum) { // Forcing a maximum quantity of products
             $scope.isLoading = true;
             requestProducts(total, function(products) {
-                $scope.isLoading = false;
-                addProducts(products);
-                preloader();
+                preloadedProducts = products;
+                showPreloaded();
             });
         } else if (total + perPage > maximum) {
             $scope.isEndOfCatalogue = true;
