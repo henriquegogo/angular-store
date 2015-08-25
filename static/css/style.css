@@ -1,7 +1,3 @@
-.ad {
-    width: 100%;
-}
-
 #products table tr {
     height: 60px;
 }
@@ -9,4 +5,8 @@
 #products table thead [ng-click] {
     text-decoration: underline;
     cursor: pointer;
+}
+
+#products table td[colspan] {
+    text-align: center;
 }

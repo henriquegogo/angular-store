@@ -25,12 +25,14 @@ app.controller('ProductsController', ['$scope', '$http', function($scope, $http)
     var perPage = 10;
     var maximum = 100;
     var sort = 'id';
-    var requestIsRunning = false;
+    var sponsorPeriodicity = 20;
     var preloadedProducts = null;
+    var requestIsRunning = false;
+    var allUniqueIds = [];
+    $scope.products = [];
 
     function init() {
-        clearState();
-        $scope.sortBy(sort);
+        $scope.getMore();
         scrollListener($scope.getMore);
     }
 
@@ -42,14 +44,30 @@ app.controller('ProductsController', ['$scope', '$http', function($scope, $http)
     }
 
     function clearState() {
+        preloadedProducts = null;
+        allUniqueIds = [];
         $scope.products = [];
         $scope.isLoading = false;
         $scope.isEndOfCatalogue = false;
     }
 
+    function randomUniqueId() {
+        function generateMath() { return Math.floor(Math.random()*1000); }
+        var newId = generateMath();
+        while (allUniqueIds[newId]) newId = generateMath(); 
+        allUniqueIds[newId] = true;
+        console.log(allUniqueIds);
+        return newId;
+    }
+
     function addProducts(moreProducts) {
         for (var i in moreProducts) {
             $scope.products.push(moreProducts[i]);
+
+            if ($scope.products.length % 20 === 0) {
+                var sponsor = { isSponsor: true, id: randomUniqueId() };
+                $scope.products.push(sponsor);
+            }
         }
     }
 
