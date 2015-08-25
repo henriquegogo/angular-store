@@ -25,6 +25,8 @@ app.controller('ProductsController', ['$scope', '$http', function($scope, $http)
     var perPage = 10;
     var maximum = 100;
     var sort = 'id';
+    var requestIsRunning = false;
+    var preloadedProducts = null;
 
     function init() {
         clearState();
@@ -63,23 +65,38 @@ app.controller('ProductsController', ['$scope', '$http', function($scope, $http)
     }
 
     function requestProducts(total, callback) {
-        if (!$scope.isLoading) {
+        if (!requestIsRunning) {
             var url = apiUrl + '?sort=' + sort + '&limit=' + perPage + '&skip=' + total;
 
-            $scope.isLoading = true;
+            requestIsRunning = true;
             $http.get(url, { transformResponse: function(value) { 
                 return ndjsonToJson(value);
             }}).then(function(response) {
-                $scope.isLoading = false;
+                requestIsRunning = false;
                 callback(response.data);
             });
         }
     }
 
+    function preloader() {
+        var total = $scope.products.length;
+        requestProducts(total, function(products) {
+            preloadedProducts = products;
+        });
+    }
+
     function fetchProducts(total) {
-        if (total + perPage <= maximum) { // Forcing a maximum quantity of products
+        if (preloadedProducts && total + perPage <= maximum) {
+            addProducts(preloadedProducts);
+            preloadedProducts = null;
+            preloader();
+
+        } else if (total + perPage <= maximum) { // Forcing a maximum quantity of products
+            $scope.isLoading = true;
             requestProducts(total, function(products) {
+                $scope.isLoading = false;
                 addProducts(products);
+                preloader();
             });
         } else if (total + perPage > maximum) {
             $scope.isEndOfCatalogue = true;
