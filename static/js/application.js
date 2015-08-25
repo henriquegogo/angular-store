@@ -23,7 +23,6 @@ app.filter('daysago', function() {
 app.controller('ProductsController', ['$scope', '$http', function($scope, $http) {
     var apiUrl = '/api/products';
     var perPage = 15;
-    var total = perPage;
     var maximum = 100;
     var sort = 'id';
 
@@ -36,7 +35,7 @@ app.controller('ProductsController', ['$scope', '$http', function($scope, $http)
     function scrollListener(callback) {
         angular.element(window).bind('scroll', function() {
             var currentYOffset = window.innerHeight + window.pageYOffset;
-            if (currentYOffset >= document.body.offsetHeight) callback();
+            if (currentYOffset >= document.body.offsetHeight) $scope.$apply(callback);
         })
     }
 
@@ -64,10 +63,10 @@ app.controller('ProductsController', ['$scope', '$http', function($scope, $http)
         return jsonArrayObjects;
     }
 
-    function fetchProducts(skipValue) {
-        if (skipValue <= maximum) { // Forcing a maximum quantity of products
-            if (skipValue + perPage > maximum) skipValue = maximum - perPage;
-            var url = apiUrl + '?sort=' + sort + '&limit=' + perPage + '&skip=' + skipValue;
+    function fetchProducts(total) {
+        if (total <= maximum) { // Forcing a maximum quantity of products
+            if (total + perPage > maximum) total = maximum - perPage;
+            var url = apiUrl + '?sort=' + sort + '&limit=' + perPage + '&skip=' + total;
             $scope.isLoading = true;
 
             $http.get(url, { transformResponse: function(value) { 
@@ -96,8 +95,7 @@ app.controller('ProductsController', ['$scope', '$http', function($scope, $http)
     };
 
     $scope.getMore = function() {
-        fetchProducts(total);
-        total = total + perPage; 
+        fetchProducts($scope.products.length);
     };
 
     init();
