@@ -28,7 +28,7 @@ app.controller('ProductsController', ['$scope', '$http', function($scope, $http)
     var sponsorPeriodicity = 20;
     var preloadedProducts = null;
     var requestIsRunning = false;
-    var allUniqueIds = [];
+    var lastSponsorId = null;
     $scope.products = [];
 
     function init() {
@@ -45,17 +45,18 @@ app.controller('ProductsController', ['$scope', '$http', function($scope, $http)
 
     function clearState() {
         preloadedProducts = null;
-        allUniqueIds = [];
+        lastSponsorId = null;
         $scope.products = [];
         $scope.isLoading = false;
         $scope.isEndOfCatalogue = false;
     }
 
     function randomUniqueId() {
-        function generateMath() { return Math.floor(Math.random()*1000); }
-        var newId = generateMath();
-        while (allUniqueIds[newId]) newId = generateMath(); 
-        allUniqueIds[newId] = true;
+        function generateId() { return Math.floor(Math.random()*1000) % 16 + 1; }
+        var newId = generateId();
+        while (newId == lastSponsorId) newId = generateId();
+        lastSponsorId = newId;
+
         return newId;
     }
 
