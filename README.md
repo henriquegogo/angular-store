@@ -1,4 +1,4 @@
-My Store
+My Names Store
 ====
 
 This is an ecommerce site, made as an example of Angular.js knowledge.
