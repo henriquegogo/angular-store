@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html ng-app="ascii-warehouse">
+<html ng-app="my-store">
     <head>
-        <title>Discount Ascii Warehouse</title>
+        <title>My Store</title>
 
         <!-- jQuery -->
         <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -22,9 +22,8 @@
         <header class="jumbotron">
             <div class="container">
                 <div class="col-md-9">
-                    <h1>Discount Ascii Warehouse</h1>
-
-                    <p>Here you're sure to find a bargain on some of the finest ascii available to purchase. Be sure to peruse our selection of ascii faces in an exciting range of sizes and prices.</p>
+                    <h1>My Store</h1>
+                    <p>Products that you will like to buy.</p>
                 </div>
             </div>
         </header>
@@ -43,12 +42,11 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="product in products">
-                            <td ng-if="product.isSponsor" colspan='5'><img class="ad" src="/ad/?r={{product.id}}"/></div>
-                            <td ng-if="!product.isSponsor" style="font-size: {{product.size}}px">{{product.face}}</td>
-                            <td ng-if="!product.isSponsor">{{product.id}}</td>
-                            <td ng-if="!product.isSponsor">{{product.size}} pixels</td>
-                            <td ng-if="!product.isSponsor">{{(product.price / 100) | currency:'$':2}}</td>
-                            <td ng-if="!product.isSponsor">{{product.date | daysago}}</td>
+                            <td style="font-size: {{product.size}}px">{{product.face}}</td>
+                            <td>{{product.id}}</td>
+                            <td>{{product.size}} pixels</td>
+                            <td>{{(product.price / 100) | currency:'$':2}}</td>
+                            <td>{{product.date | daysago}}</td>
                         </tr>
                     </tbody>
                 </table>

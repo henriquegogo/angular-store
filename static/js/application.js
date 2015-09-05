@@ -1,4 +1,4 @@
-var app = angular.module('ascii-warehouse', []);
+var app = angular.module('my-store', []);
 
 app.filter('daysago', function() {
     function timeAgo(date) {
@@ -25,10 +25,8 @@ app.controller('ProductsController', ['$scope', '$http', function($scope, $http)
     var perPage = 10;
     var maximum = 100;
     var sort = 'id';
-    var sponsorPeriodicity = 20;
     var preloadedProducts = null;
     var requestIsRunning = false;
-    var lastSponsorId = null;
     var runPreloader = true;
     $scope.products = [];
 
@@ -46,30 +44,15 @@ app.controller('ProductsController', ['$scope', '$http', function($scope, $http)
 
     function clearState() {
         preloadedProducts = null;
-        lastSponsorId = null;
         runPreloader = true;
         $scope.products = [];
         $scope.isLoading = false;
         $scope.isEndOfCatalogue = false;
     }
 
-    function randomUniqueId() {
-        function generateId() { return Math.floor(Math.random()*1000) % 16 + 1; }
-        var newId = generateId();
-        while (newId == lastSponsorId) newId = generateId();
-        lastSponsorId = newId;
-
-        return newId;
-    }
-
     function addProducts(moreProducts) {
         for (var i in moreProducts) {
             $scope.products.push(moreProducts[i]);
-
-            if ($scope.products.length % 20 === 0) {
-                var sponsor = { isSponsor: true, id: randomUniqueId() };
-                $scope.products.push(sponsor);
-            }
         }
     }
 
@@ -137,7 +120,7 @@ app.controller('ProductsController', ['$scope', '$http', function($scope, $http)
 
     $scope.loadProductsLabel = function() {
         if ($scope.isLoading) return "Loading...";
-        else if ($scope.isEndOfCatalogue) return "~ end of catalogue ~";
+        else if ($scope.isEndOfCatalogue) return "=== That's all, folks! ===";
         else return "More products";
     };
 
