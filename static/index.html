@@ -22,8 +22,8 @@
         <header class="jumbotron">
             <div class="container">
                 <div class="col-md-9">
-                    <h1>My Store</h1>
-                    <p>Products that you will like to buy.</p>
+                    <h1>My Names Store</h1>
+                    <p>Names that you will like to buy.</p>
                 </div>
             </div>
         </header>
@@ -35,16 +35,14 @@
                         <tr>
                             <th></th>
                             <th ng-click="sortBy('id')">Id</th>
-                            <th ng-click="sortBy('size')">Size</th>
                             <th ng-click="sortBy('price')">Price</th>
                             <th>Date</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="product in products">
-                            <td style="font-size: {{product.size}}px">{{product.face}}</td>
+                            <td>{{product.description}}</td>
                             <td>{{product.id}}</td>
-                            <td>{{product.size}} pixels</td>
                             <td>{{(product.price / 100) | currency:'$':2}}</td>
                             <td>{{product.date | daysago}}</td>
                         </tr>
