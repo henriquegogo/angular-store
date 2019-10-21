@@ -9,7 +9,7 @@
   "author": "Henrique Soares",
   "license": "",
   "dependencies": {
-    "ecstatic": "~0.5.4",
+    "ecstatic": "~4.1.2",
     "Faker": "~0.7.2"
   }
 }
